@@ -55,7 +55,7 @@ class BasicDroneController(object):
 		try:
 			self.Flattrim()
 		except:
-			print "service did not process req"
+			print "service did not process request"
 
 	def ReceiveNavdata(self,navdata):
 		# Although there is a lot of data in this packet, we're only interested in the state at the moment	

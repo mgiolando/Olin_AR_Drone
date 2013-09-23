@@ -1,6 +1,6 @@
 <launch>
 	<!-- Launches the AR.Drone driver -->
-	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true" args="-ip 192.168.3.10 -p 25">
+	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true" ns="charlie" args="-i 192.168.3.11 -p 35">
 	    <param name="outdoor" value="0" />				<!-- If we are flying outdoors, will select more aggressive default settings -->
 	    <param name="flight_without_shell" value="0" /> <!-- Changes internal controller gains if we are flying without the propeller guard -->
 	    
@@ -21,6 +21,9 @@
 		<param name="dev" type="str" value="/dev/input/js0"/>
 	</node>
 	
+	<!-- Namespaces -->
+	<param name="NameSpaces"	type="str"	value="[charlie]" /> <!--no spaces allowed in list-->
+
 	<!-- Launches the joystick controller -->
 	<node name="joystick_controller" pkg="ardrone_tutorials" type="joystick_controller.py" output="screen" required="true">
 		<!-- Configures the joystick button mapping -->

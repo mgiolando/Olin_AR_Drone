@@ -22,7 +22,7 @@ from PySide import QtCore, QtGui
 NameSpaces = []
 
 # define the default mapping between joystick buttons and their corresponding actions
-ButtonEmergency = 0
+ButtonEmergency = 8
 ButtonLand      = 1
 ButtonTakeoff   = 2
 ButtonFlattrim  = 7
@@ -62,6 +62,8 @@ if __name__=='__main__':
 	# Firstly we setup a ros node, so that we can communicate with the other packages
 	rospy.init_node('ardrone_joystick_controller')
 
+	print rospy.get_param("~NameSpaces", NameSpaces)
+	print type(rospy.get_param("~NameSpaces", NameSpaces))
 	# Next load in the parameters from the launch-file
 	NameSpaces      = rospy.get_param("~NameSpaces", NameSpaces).replace(' ','').strip('[]').split(',')
 
@@ -95,8 +97,8 @@ if __name__=='__main__':
 	# 	subJoyList.append(rospy.Subscriber('j'+str(idx)+'/joy', Joy, ReceiveJoy, controllers))
 
 	rospy.Subscriber('j0/joy', Joy, ReceiveJoy, controllerList[0])
-	rospy.Subscriber('j1/joy', Joy, ReceiveJoy, controllerList[1])
-	rospy.Subscriber('j2/joy', Joy, ReceiveJoy, controllerList[2])
+	# rospy.Subscriber('j1/joy', Joy, ReceiveJoy, controllerList[1])
+	# rospy.Subscriber('j2/joy', Joy, ReceiveJoy, controllerList[2])
 
 	# executes the QT application
 	# display.show()
