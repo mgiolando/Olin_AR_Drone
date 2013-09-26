@@ -19,13 +19,10 @@ from sensor_msgs.msg import Joy
 # Finally the GUI libraries
 from PySide import QtCore, QtGui
 
-NameSpaces = []
-
 # define the default mapping between joystick buttons and their corresponding actions
 ButtonEmergency = 8
 ButtonLand      = 1
-ButtonTakeoff   = 2
-ButtonFlattrim  = 7
+ButtonTakeoff   = 0
 
 # define the default mapping between joystick axes and their corresponding directions
 AxisRoll        = 0
@@ -40,13 +37,10 @@ ScaleYaw        = 1.0
 ScaleZ          = 1.0
 
 # handles the reception of joystick packets
-def ReceiveJoy(data, controller):
+def ReceiveJoystickMessage(data):
 	if data.buttons[ButtonEmergency]==1:
 		rospy.loginfo("Emergency Button Pressed")
 		controller.SendEmergency()
-	elif data.buttons[ButtonFlattrim]==1:
-		rospy.loginfo("Flattrim Pressed")
-		controller.CallFlattrim()
 	elif data.buttons[ButtonLand]==1:
 		rospy.loginfo("Land Button Pressed")
 		controller.SendLand()
@@ -56,18 +50,14 @@ def ReceiveJoy(data, controller):
 	else:
 		controller.SetCommand(data.axes[AxisRoll]/ScaleRoll,data.axes[AxisPitch]/ScalePitch,data.axes[AxisYaw]/ScaleYaw,data.axes[AxisZ]/ScaleZ)
 
+
 # Setup the application
 if __name__=='__main__':
 	import sys
 	# Firstly we setup a ros node, so that we can communicate with the other packages
 	rospy.init_node('ardrone_joystick_controller')
 
-	print rospy.get_param("~NameSpaces", NameSpaces)
-	print type(rospy.get_param("~NameSpaces", NameSpaces))
 	# Next load in the parameters from the launch-file
-	NameSpaces      = rospy.get_param("~NameSpaces", NameSpaces).replace(' ','').strip('[]').split(',')
-
-	ButtonFlattrim  = int (   rospy.get_param("~ButtonFlattrim",ButtonFlattrim) )
 	ButtonEmergency = int (   rospy.get_param("~ButtonEmergency",ButtonEmergency) )
 	ButtonLand      = int (   rospy.get_param("~ButtonLand",ButtonLand) )
 	ButtonTakeoff   = int (   rospy.get_param("~ButtonTakeoff",ButtonTakeoff) )
@@ -81,30 +71,17 @@ if __name__=='__main__':
 	ScaleZ          = float ( rospy.get_param("~ScaleZ",ScaleZ) )
 
 	# Now we construct our Qt Application and associated controllers and windows
-	# app = QtGui.QApplication(sys.argv)
-	# display = DroneVideoDisplay(ns='alpha')
+	app = QtGui.QApplication(sys.argv)
+	display = DroneVideoDisplay()
+	controller = BasicDroneController()
 
-	print NameSpaces, type(NameSpaces)
-
-	controllerList = []
-	for ns in NameSpaces:
-		# print ns
-		controllerList.append(BasicDroneController(ns))
-
-	# subJoyList = []
 	# subscribe to the /joy topic and handle messages of type Joy with the function ReceiveJoystickMessage
-	# for idx, controllers in enumerate(controllerList):
-	# 	subJoyList.append(rospy.Subscriber('j'+str(idx)+'/joy', Joy, ReceiveJoy, controllers))
-
-	rospy.Subscriber('j0/joy', Joy, ReceiveJoy, controllerList[0])
-	# rospy.Subscriber('j1/joy', Joy, ReceiveJoy, controllerList[1])
-	# rospy.Subscriber('j2/joy', Joy, ReceiveJoy, controllerList[2])
-
+	subJoystick = rospy.Subscriber('/joy', Joy, ReceiveJoystickMessage)
+	
 	# executes the QT application
-	# display.show()
-	# status = app.exec_()
-	print("you are good!")
+	display.show()
+	status = app.exec_()
+
 	# and only progresses to here once the application has been shutdown
-	rospy.spin()
 	rospy.signal_shutdown('Great Flying!')
-	# sys.exit(status)
+	sys.exit(status)

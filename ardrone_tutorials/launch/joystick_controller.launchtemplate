@@ -1,6 +1,6 @@
 <launch>
 	<!-- Launches the AR.Drone driver -->
-	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true" args="-ip 192.168.3.10 -p 25">
+	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true" args="-i 192.168.1.9 -p 15">
 	    <param name="outdoor" value="0" />				<!-- If we are flying outdoors, will select more aggressive default settings -->
 	    <param name="flight_without_shell" value="0" /> <!-- Changes internal controller gains if we are flying without the propeller guard -->
 	    
@@ -18,21 +18,21 @@
 	</node>
 
 	<node name="joy_node" pkg="joy" type="joy_node" output="screen" clear_params="true">
-		<param name="dev" type="str" value="/dev/input/js0"/>
+		<param name="dev" type="str" value="/dev/input/js<YOUR JOYSTICK DEVICE>"/>
 	</node>
 	
 	<!-- Launches the joystick controller -->
 	<node name="joystick_controller" pkg="ardrone_tutorials" type="joystick_controller.py" output="screen" required="true">
 		<!-- Configures the joystick button mapping -->
-		<param name="ButtonEmergency"	value="8" />
-		<param name="ButtonLand"		value="1" />
-		<param name="ButtonTakeoff"		value="0" />
+		<param name="ButtonEmergency"	value="<YOUR MAPPING eg 0>" />
+		<param name="ButtonLand"		value="<YOUR MAPPING eg 1>" />
+		<param name="ButtonTakeoff"		value="<YOUR MAPPING eg 2>" />
 
 		<!-- Configures the joystick axis mapping -->
-		<param name="AxisRoll"			value="0" />
-		<param name="AxisPitch"			value="1" />
-		<param name="AxisYaw"			value="3" />
-		<param name="AxisZ"				value="4" />
+		<param name="AxisRoll"			value="<YOUR MAPPING eg 0>" />
+		<param name="AxisPitch"			value="<YOUR MAPPING eg 1>" />
+		<param name="AxisYaw"			value="<YOUR MAPPING eg 2>" />
+		<param name="AxisZ"				value="<YOUR MAPPING eg 3>" />
 
 		<!-- Configures the joystick mapping -->
 		<param name="ScaleRoll"			value="1" />
