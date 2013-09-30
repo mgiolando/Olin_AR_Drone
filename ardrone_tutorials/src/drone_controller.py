@@ -54,7 +54,7 @@ class BasicDroneController(object):
 	def CallFlattrim(self):
 		rospy.wait_for_service(self.ns + '/ardrone/flattrim')
 		try:
-			self.Flattrim = rospy.ServiceProxy(self.ns + '/ardone/flattrim', srvEmpty)
+			self.Flattrim = rospy.ServiceProxy(self.ns + '/ardrone/flattrim', srvEmpty)
 			self.Flattrim()
 		except rospy.ServiceException, e:
 			print "Service call failed: %s"%e
