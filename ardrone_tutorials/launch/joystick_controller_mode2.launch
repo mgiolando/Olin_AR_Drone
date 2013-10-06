@@ -28,6 +28,7 @@
 		<param name="ButtonLand"		 value="1" />
 		<param name="ButtonTakeoff"	 value="0" />
 		<param name="ButtonFlattrim"  value="7" />
+		<param name="ButtonHover" value="2" />
 
 		<!-- Configures the joystick axis mapping -->
 		<param name="AxisRoll"			value="3" />

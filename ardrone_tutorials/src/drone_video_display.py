@@ -24,6 +24,9 @@ from drone_status import DroneStatus
 # The GUI libraries
 from PySide import QtCore, QtGui
 
+#OpenCV 
+import cv2, cv_bridge
+
 
 # Some Constants
 CONNECTION_CHECK_PERIOD = 250 #ms
@@ -116,7 +119,12 @@ class DroneVideoDisplay(QtGui.QMainWindow):
 			finally:
 				self.imageLock.release()
 
-			# We could  do more processing (eg OpenCV) here if we wanted to, but for now lets just display the window.
+			# OpenCV
+			cvImage = cv_bridge.CvBridge.imgmsg_to_cv(self.image, desired_encoding="passthrough")
+
+
+			#display window 
+			self.resize(image.width)
 			self.resize(image.width(),image.height())
 			self.imageBox.setPixmap(image)
 
