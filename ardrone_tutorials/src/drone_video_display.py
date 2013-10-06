@@ -100,31 +100,29 @@ class DroneVideoDisplay(QtGui.QMainWindow):
 			# We have some issues with locking between the display thread and the ros messaging thread due to the size of the image, so we need to lock the resources
 			self.imageLock.acquire()
 			try:			
-					# Convert the ROS image into a QImage which we can display
-					image = QtGui.QPixmap.fromImage(QtGui.QImage(self.image.data, self.image.width, self.image.height, QtGui.QImage.Format_RGB888))
-					if len(self.tags) > 0:
-						self.tagLock.acquire()
-						try:
-							painter = QtGui.QPainter()
-							painter.begin(image)
-							painter.setPen(QtGui.QColor(0,255,0))
-							painter.setBrush(QtGui.QColor(0,255,0))
-							for (x,y,d) in self.tags:
-								r = QtCore.QRectF((x*image.width())/1000-DETECT_RADIUS,(y*image.height())/1000-DETECT_RADIUS,DETECT_RADIUS*2,DETECT_RADIUS*2)
-								painter.drawEllipse(r)
-								painter.drawText((x*image.width())/1000+DETECT_RADIUS,(y*image.height())/1000-DETECT_RADIUS,str(d/100)[0:4]+'m')
-							painter.end()
-						finally:
-							self.tagLock.release()
+				# Convert the ROS image into a QImage which we can display
+				image = QtGui.QPixmap.fromImage(QtGui.QImage(self.image.data, self.image.width, self.image.height, QtGui.QImage.Format_RGB888))
+				if len(self.tags) > 0:
+					self.tagLock.acquire()
+					try:
+						painter = QtGui.QPainter()
+						painter.begin(image)
+						painter.setPen(QtGui.QColor(0,255,0))
+						painter.setBrush(QtGui.QColor(0,255,0))
+						for (x,y,d) in self.tags:
+							r = QtCore.QRectF((x*image.width())/1000-DETECT_RADIUS,(y*image.height())/1000-DETECT_RADIUS,DETECT_RADIUS*2,DETECT_RADIUS*2)
+							painter.drawEllipse(r)
+							painter.drawText((x*image.width())/1000+DETECT_RADIUS,(y*image.height())/1000-DETECT_RADIUS,str(d/100)[0:4]+'m')
+						painter.end()
+					finally:
+						self.tagLock.release()
 			finally:
 				self.imageLock.release()
 
 			# OpenCV
-			cvImage = cv_bridge.CvBridge.imgmsg_to_cv(self.image, desired_encoding="passthrough")
-
+			# cvImage = cv_bridge.CvBridge.imgmsg_to_cv(self.image, desired_encoding="passthrough")
 
 			#display window 
-			self.resize(image.width)
 			self.resize(image.width(),image.height())
 			self.imageBox.setPixmap(image)
 
