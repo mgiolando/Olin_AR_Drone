@@ -72,7 +72,9 @@ class BasicDroneController(object):
 		# Send a takeoff message to the ardrone driver
 		# Note we only send a takeoff message if the drone is landed - an unexpected takeoff is not good!
 		if(self.status == DroneStatus.Landed):
+			self.SendHover()
 			self.pubTakeoff.publish(msgEmpty())
+			self.SendHover()
 
 	def SendLand(self):
 		# Send a landing message to the ardrone driver
