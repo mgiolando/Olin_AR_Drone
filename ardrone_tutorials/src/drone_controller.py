@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# A basic drone controller class for the tutorial "Up and flying with the AR.Drone and ROS | Getting Started"
-# https://github.com/mikehamer/ardrone_tutorials_getting_started
-
 # This class implements basic control functionality which we will be using in future tutorials.
 # It can command takeoff/landing/emergency as well as drone movement
 # It also tracks the drone state based on navdata feedback
